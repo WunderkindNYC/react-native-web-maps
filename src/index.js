@@ -15,6 +15,9 @@ class MapView extends Component {
 
   handleMapMounted = map => {
     this.map = map;
+  };
+
+  onMapReady = () => {
     this.props.onMapReady && this.props.onMapReady();
   };
 
@@ -34,7 +37,15 @@ class MapView extends Component {
   };
 
   render() {
-    const { region, initialRegion, onRegionChange, onCenterChanged, onPress, options, zoom = 15 } = this.props;
+    const {
+      region,
+      initialRegion,
+      onRegionChange,
+      onCenterChanged,
+      onPress,
+      options,
+      zoom = 15,
+    } = this.props;
     const { center } = this.state;
     const style = this.props.style || styles.container;
 
@@ -58,6 +69,7 @@ class MapView extends Component {
       <View style={style}>
         <GoogleMapContainer
           handleMapMounted={this.handleMapMounted}
+          onTilesLoaded={this.onMapReady}
           containerElement={<div style={{ height: '100%' }} />}
           mapElement={<div style={{ height: '100%' }} />}
           {...centerProps}

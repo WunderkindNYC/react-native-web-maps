@@ -42,6 +42,7 @@ class MapView extends Component {
       initialRegion,
       onRegionChange,
       onCenterChanged,
+      onZoomChanged,
       onPress,
       options,
       zoom = 15,
@@ -76,6 +77,7 @@ class MapView extends Component {
           onDragStart={onRegionChange}
           onIdle={this.onDragEnd}
           onCenterChanged={onCenterChanged}
+          onZoomChanged={onZoomChanged}
           zoom={zoom}
           onClick={onPress}
           options={options}>

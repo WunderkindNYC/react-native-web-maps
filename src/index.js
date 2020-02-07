@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { withGoogleMap, GoogleMap } from 'react-google-maps';
-import Marker from './Marker';
-import Polyline from './Polyline';
+import React, { Component } from "react";
+import { View, StyleSheet } from "react-native";
+import { withGoogleMap, GoogleMap } from "react-google-maps";
+import Marker from "./Marker";
+import Polyline from "./Polyline";
 
 const GoogleMapContainer = withGoogleMap(props => (
   <GoogleMap {...props} ref={props.handleMapMounted} />
@@ -10,7 +10,7 @@ const GoogleMapContainer = withGoogleMap(props => (
 
 class MapView extends Component {
   state = {
-    center: null,
+    center: null
   };
 
   handleMapMounted = map => {
@@ -22,7 +22,9 @@ class MapView extends Component {
   };
 
   animateToRegion(coordinates) {
-    this.setState({ center: { lat: coordinates.latitude, lng: coordinates.longitude } });
+    this.setState({
+      center: { lat: coordinates.latitude, lng: coordinates.longitude }
+    });
   }
 
   onDragEnd = () => {
@@ -31,7 +33,7 @@ class MapView extends Component {
       const center = this.map.getCenter();
       onRegionChangeComplete({
         latitude: center.lat(),
-        longitude: center.lng(),
+        longitude: center.lng()
       });
     }
   };
@@ -45,7 +47,8 @@ class MapView extends Component {
       onZoomChanged,
       onPress,
       options,
-      zoom = 15,
+      onReady,
+      zoom = 15
     } = this.props;
     const { center } = this.state;
     const style = this.props.style || styles.container;
@@ -54,25 +57,26 @@ class MapView extends Component {
       ? {
           center: {
             lat: region.latitude,
-            lng: region.longitude,
-          },
+            lng: region.longitude
+          }
         }
       : center
       ? { center }
       : {
           defaultCenter: {
             lat: initialRegion.latitude,
-            lng: initialRegion.longitude,
-          },
+            lng: initialRegion.longitude
+          }
         };
 
     return (
       <View style={style}>
         <GoogleMapContainer
+          onReady={onReady}
           handleMapMounted={this.handleMapMounted}
           onTilesLoaded={this.onMapReady}
-          containerElement={<div style={{ height: '100%' }} />}
-          mapElement={<div style={{ height: '100%' }} />}
+          containerElement={<div style={{ height: "100%" }} />}
+          mapElement={<div style={{ height: "100%" }} />}
           {...centerProps}
           onDragStart={onRegionChange}
           onIdle={this.onDragEnd}
@@ -80,7 +84,8 @@ class MapView extends Component {
           onZoomChanged={onZoomChanged}
           zoom={zoom}
           onClick={onPress}
-          options={options}>
+          options={options}
+        >
           {this.props.children}
         </GoogleMapContainer>
       </View>
@@ -93,8 +98,8 @@ MapView.Polyline = Polyline;
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-  },
+    height: "100%"
+  }
 });
 
 export default MapView;

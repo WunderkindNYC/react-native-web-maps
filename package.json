@@ -52,6 +52,6 @@
     "react-native-web": "*"
   },
   "dependencies": {
-    "react-google-maps": "^9.4.5"
+    "@react-google-maps/api": "^1.8.3"
   }
 }

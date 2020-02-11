@@ -1,17 +1,27 @@
-import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
-import { withGoogleMap, GoogleMap } from "react-google-maps";
-import Marker from "./Marker";
-import Polyline from "./Polyline";
+import React, { Component } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { GoogleMap } from '@react-google-maps/api';
+import Marker from './Marker';
+import Polyline from './Polyline';
 
-const GoogleMapContainer = withGoogleMap(props => (
-  <GoogleMap {...props} ref={props.handleMapMounted} />
-));
+const GoogleMapContainer = React.memo(props => {
+  return <GoogleMap {...props} onLoad={props.handleMapMounted} />;
+});
 
 class MapView extends Component {
   state = {
     center: null
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      center: {
+        lat: props.initialRegion.latitude,
+        lng: props.initialRegion.longitude
+      }
+    };
+  }
 
   handleMapMounted = map => {
     this.map = map;
@@ -42,12 +52,9 @@ class MapView extends Component {
     const {
       region,
       initialRegion,
-      onRegionChange,
       onCenterChanged,
-      onZoomChanged,
       onPress,
       options,
-      onReady,
       zoom = 15
     } = this.props;
     const { center } = this.state;
@@ -63,7 +70,7 @@ class MapView extends Component {
       : center
       ? { center }
       : {
-          defaultCenter: {
+          center: {
             lat: initialRegion.latitude,
             lng: initialRegion.longitude
           }
@@ -72,17 +79,15 @@ class MapView extends Component {
     return (
       <View style={style}>
         <GoogleMapContainer
-          onReady={onReady}
+          {...centerProps}
           handleMapMounted={this.handleMapMounted}
           onTilesLoaded={this.onMapReady}
-          containerElement={<div style={{ height: "100%" }} />}
-          mapElement={<div style={{ height: "100%" }} />}
-          {...centerProps}
-          onDragStart={onRegionChange}
-          onIdle={this.onDragEnd}
-          onCenterChanged={onCenterChanged}
-          onZoomChanged={onZoomChanged}
+          mapContainerStyle={{ height: '100%' }}
+          containerElement={<div style={{ height: '100%' }} />}
+          mapElement={<div style={{ height: '100%' }} />}
           zoom={zoom}
+          onCenterChanged={onCenterChanged}
+          // onDragStart={onRegionChange}
           onClick={onPress}
           options={options}
         >
@@ -98,7 +103,7 @@ MapView.Polyline = Polyline;
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%"
+    height: '100%'
   }
 });
 
